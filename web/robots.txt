@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://pcspecs.dev/sitemap.xml

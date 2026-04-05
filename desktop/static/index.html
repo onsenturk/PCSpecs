@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PCSpecs — Hardware Dashboard</title>
+    <link rel="stylesheet" href="/static/styles/main.css">
+</head>
+<body>
+
+<header class="app-header">
+    <h1 class="logo">PC<span class="accent">Specs</span></h1>
+    <p class="tagline">Hardware Dashboard</p>
+    <div class="privacy-badge">
+        <span class="dot"></span> Local Only — No Data Collected
+    </div>
+</header>
+
+<main class="dashboard">
+    <!-- CPU Card -->
+    <section class="card" id="cpu-card">
+        <div class="card-header">
+            <svg class="card-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                <rect x="4" y="4" width="16" height="16" rx="2"/>
+                <rect x="8" y="8" width="8" height="8" rx="1"/>
+                <line x1="2" y1="9" x2="4" y2="9"/><line x1="2" y1="15" x2="4" y2="15"/>
+                <line x1="20" y1="9" x2="22" y2="9"/><line x1="20" y1="15" x2="22" y2="15"/>
+                <line x1="9" y1="2" x2="9" y2="4"/><line x1="15" y1="2" x2="15" y2="4"/>
+                <line x1="9" y1="20" x2="9" y2="22"/><line x1="15" y1="20" x2="15" y2="22"/>
+            </svg>
+            <h2>CPU</h2>
+        </div>
+        <div class="card-body">
+            <div class="spec-row"><span class="label">Model</span><span class="value" id="cpu-brand">—</span></div>
+            <div class="spec-row"><span class="label">Cores / Threads</span><span class="value" id="cpu-cores">—</span></div>
+            <div class="spec-row"><span class="label">Base Frequency</span><span class="value" id="cpu-freq">—</span></div>
+            <div class="spec-row"><span class="label">Architecture</span><span class="value" id="cpu-arch">—</span></div>
+            <div class="gauge-section">
+                <div class="gauge-label">Usage</div>
+                <div class="gauge-container">
+                    <svg class="gauge" viewBox="0 0 120 120">
+                        <circle cx="60" cy="60" r="50" class="gauge-bg"/>
+                        <circle cx="60" cy="60" r="50" class="gauge-fill" id="cpu-gauge"/>
+                        <text x="60" y="55" class="gauge-value" id="cpu-usage-text">0%</text>
+                        <text x="60" y="72" class="gauge-sub">CPU</text>
+                    </svg>
+                </div>
+            </div>
+            <div class="spec-row"><span class="label">Current Freq</span><span class="value" id="cpu-current-freq">—</span></div>
+            <div class="core-bars" id="cpu-core-bars"></div>
+        </div>
+    </section>
+
+    <!-- GPU Card -->
+    <section class="card" id="gpu-card">
+        <div class="card-header">
+            <svg class="card-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                <rect x="2" y="6" width="20" height="12" rx="2"/>
+                <rect x="5" y="9" width="6" height="6" rx="1"/>
+                <circle cx="17" cy="12" r="2"/>
+            </svg>
+            <h2>GPU</h2>
+        </div>
+        <div class="card-body" id="gpu-body">
+            <p class="loading">Detecting GPU...</p>
+        </div>
+    </section>
+
+    <!-- Memory Card -->
+    <section class="card" id="memory-card">
+        <div class="card-header">
+            <svg class="card-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                <rect x="3" y="6" width="18" height="12" rx="1"/>
+                <rect x="5" y="9" width="2" height="6"/><rect x="9" y="9" width="2" height="6"/>
+                <rect x="13" y="9" width="2" height="6"/><rect x="17" y="9" width="2" height="6"/>
+                <line x1="7" y1="6" x2="7" y2="4"/><line x1="11" y1="6" x2="11" y2="4"/>
+                <line x1="15" y1="6" x2="15" y2="4"/><line x1="19" y1="6" x2="19" y2="4"/>
+            </svg>
+            <h2>Memory</h2>
+        </div>
+        <div class="card-body">
+            <div class="spec-row"><span class="label">Total</span><span class="value" id="mem-total">—</span></div>
+            <div class="spec-row"><span class="label">Speed</span><span class="value" id="mem-speed">—</span></div>
+            <div class="gauge-section">
+                <div class="gauge-label">Usage</div>
+                <div class="gauge-container">
+                    <svg class="gauge" viewBox="0 0 120 120">
+                        <circle cx="60" cy="60" r="50" class="gauge-bg"/>
+                        <circle cx="60" cy="60" r="50" class="gauge-fill gauge-fill-magenta" id="mem-gauge"/>
+                        <text x="60" y="55" class="gauge-value" id="mem-usage-text">0%</text>
+                        <text x="60" y="72" class="gauge-sub">RAM</text>
+                    </svg>
+                </div>
+            </div>
+            <div class="spec-row"><span class="label">Used / Available</span><span class="value" id="mem-used">—</span></div>
+            <div id="mem-slots"></div>
+        </div>
+    </section>
+
+    <!-- Storage Card -->
+    <section class="card" id="storage-card">
+        <div class="card-header">
+            <svg class="card-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                <rect x="4" y="4" width="16" height="16" rx="2"/>
+                <circle cx="12" cy="12" r="4"/>
+                <circle cx="12" cy="12" r="1"/>
+            </svg>
+            <h2>Storage</h2>
+        </div>
+        <div class="card-body" id="storage-body">
+            <p class="loading">Scanning drives...</p>
+        </div>
+    </section>
+
+    <!-- Motherboard Card -->
+    <section class="card" id="mobo-card">
+        <div class="card-header">
+            <svg class="card-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                <rect x="3" y="3" width="18" height="18" rx="1"/>
+                <rect x="7" y="7" width="4" height="4"/><rect x="13" y="7" width="4" height="4"/>
+                <rect x="7" y="13" width="4" height="4"/>
+                <line x1="3" y1="12" x2="7" y2="12"/><line x1="17" y1="12" x2="21" y2="12"/>
+            </svg>
+            <h2>Motherboard</h2>
+        </div>
+        <div class="card-body">
+            <div class="spec-row"><span class="label">Manufacturer</span><span class="value" id="mobo-mfr">—</span></div>
+            <div class="spec-row"><span class="label">Model</span><span class="value" id="mobo-model">—</span></div>
+            <div class="spec-row"><span class="label">BIOS Version</span><span class="value" id="bios-version">—</span></div>
+            <div class="spec-row"><span class="label">BIOS Date</span><span class="value" id="bios-date">—</span></div>
+        </div>
+    </section>
+
+    <!-- OS Card -->
+    <section class="card" id="os-card">
+        <div class="card-header">
+            <svg class="card-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                <rect x="3" y="4" width="18" height="14" rx="2"/>
+                <line x1="8" y1="21" x2="16" y2="21"/>
+                <line x1="12" y1="18" x2="12" y2="21"/>
+            </svg>
+            <h2>System</h2>
+        </div>
+        <div class="card-body">
+            <div class="spec-row"><span class="label">OS</span><span class="value" id="os-name">—</span></div>
+            <div class="spec-row"><span class="label">Version</span><span class="value" id="os-version">—</span></div>
+            <div class="spec-row"><span class="label">Architecture</span><span class="value" id="os-arch">—</span></div>
+        </div>
+    </section>
+
+    <!-- Network Card -->
+    <section class="card" id="network-card">
+        <div class="card-header">
+            <svg class="card-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                <path d="M5 12.55a11 11 0 0 1 14.08 0"/>
+                <path d="M8.53 16.11a6 6 0 0 1 6.95 0"/>
+                <circle cx="12" cy="20" r="1"/>
+            </svg>
+            <h2>Network</h2>
+        </div>
+        <div class="card-body" id="network-body">
+            <p class="loading">Detecting adapters...</p>
+        </div>
+        <div class="card-footer">
+            <div class="spec-row"><span class="label">&#x2191; Upload</span><span class="value live" id="net-sent">0 B/s</span></div>
+            <div class="spec-row"><span class="label">&#x2193; Download</span><span class="value live" id="net-recv">0 B/s</span></div>
+        </div>
+    </section>
+
+    <!-- Battery Card (hidden if no battery) -->
+    <section class="card" id="battery-card" style="display: none;">
+        <div class="card-header">
+            <svg class="card-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                <rect x="2" y="7" width="18" height="10" rx="2"/>
+                <line x1="22" y1="11" x2="22" y2="13"/>
+                <rect x="4" y="9" width="0" height="6" rx="1" id="battery-fill-rect" class="battery-fill"/>
+            </svg>
+            <h2>Battery</h2>
+        </div>
+        <div class="card-body">
+            <div class="gauge-section">
+                <div class="gauge-container">
+                    <svg class="gauge" viewBox="0 0 120 120">
+                        <circle cx="60" cy="60" r="50" class="gauge-bg"/>
+                        <circle cx="60" cy="60" r="50" class="gauge-fill gauge-fill-lime" id="bat-gauge"/>
+                        <text x="60" y="55" class="gauge-value" id="bat-text">—</text>
+                        <text x="60" y="72" class="gauge-sub" id="bat-status">BAT</text>
+                    </svg>
+                </div>
+            </div>
+            <div class="spec-row"><span class="label">Time Remaining</span><span class="value" id="bat-time">—</span></div>
+        </div>
+    </section>
+
+    <!-- Disk I/O Card -->
+    <section class="card card-small" id="diskio-card">
+        <div class="card-header">
+            <h2>Disk I/O</h2>
+        </div>
+        <div class="card-body">
+            <div class="spec-row"><span class="label">&#x2191; Read</span><span class="value live" id="disk-read">0 B/s</span></div>
+            <div class="spec-row"><span class="label">&#x2193; Write</span><span class="value live" id="disk-write">0 B/s</span></div>
+        </div>
+    </section>
+</main>
+
+<footer class="app-footer">
+    <p>PCSpecs v1.0 — Privacy-first. No data collected. Everything runs on your machine.</p>
+</footer>
+
+<script src="/static/js/app.js"></script>
+</body>
+</html>

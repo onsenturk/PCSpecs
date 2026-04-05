@@ -1,0 +1,44 @@
+name: Build Desktop App
+
+on:
+  push:
+    branches: [main]
+    paths: ['desktop/**']
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+
+      - name: Set up Python
+        uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5.6.0
+        with:
+          python-version: '3.12'
+          cache: 'pip'
+          cache-dependency-path: desktop/requirements.txt
+
+      - name: Install dependencies
+        run: pip install -r desktop/requirements.txt
+
+      - name: Build exe with PyInstaller
+        working-directory: desktop
+        run: pyinstaller pcspecs.spec --noconfirm
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: PCSpecs-windows
+          path: desktop/dist/PCSpecs.exe
+          if-no-files-found: error
+
+      - name: Create Release (on tag)
+        if: startsWith(github.ref, 'refs/tags/v')
+        uses: softprops/action-gh-release@da05d552573ad5aba039eaac05058a918a7bf631 # v2.2.2
+        with:
+          files: desktop/dist/PCSpecs.exe
+          generate_release_notes: true
