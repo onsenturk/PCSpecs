@@ -6,6 +6,7 @@ dashboard in a native app window. No data leaves your machine.
 
 from __future__ import annotations
 
+import multiprocessing
 import socket
 import sys
 import threading
@@ -67,4 +68,5 @@ def main() -> None:
 
 
 if __name__ == "__main__":
+    multiprocessing.freeze_support()
     main()
