@@ -26,18 +26,6 @@ def main() -> None:
     port = get_free_port()
     url = f"http://127.0.0.1:{port}"
 
-    print(r"""
-    ____  ______   _____                    
-   / __ \/ ____/  / ___/____  ___  __________
-  / /_/ / /       \__ \/ __ \/ _ \/ ___/ ___/
- / ____/ /___    ___/ / /_/ /  __/ /__(__  ) 
-/_/    \____/   /____/ .___/\___/\___/____/  
-                    /_/                      
-    """)
-    print(f"  PCSpecs is running at: {url}")
-    print(f"  Close the window or press Ctrl+C to exit.\n")
-    print(f"  Privacy: bound to 127.0.0.1 only — no external access.\n")
-
     # Start uvicorn in a daemon thread so the native window is the main thread
     server_thread = threading.Thread(
         target=uvicorn.run,
@@ -63,7 +51,6 @@ def main() -> None:
     )
     webview.start()
 
-    print("\n  PCSpecs stopped. Goodbye!")
     sys.exit(0)
 
 
