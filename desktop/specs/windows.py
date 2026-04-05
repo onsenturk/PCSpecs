@@ -3,10 +3,27 @@
 from __future__ import annotations
 
 import platform
+import subprocess
 import time
 
 import cpuinfo
 import psutil
+
+# Patch subprocess.Popen so that GPUtil's nvidia-smi calls don't flash a
+# console window on every invocation.  CREATE_NO_WINDOW = 0x08000000.
+_original_popen = subprocess.Popen
+
+
+class _SilentPopen(_original_popen):
+    """Popen subclass that hides console windows on Windows."""
+
+    def __init__(self, *args, **kwargs):
+        if "creationflags" not in kwargs:
+            kwargs["creationflags"] = 0x08000000  # CREATE_NO_WINDOW
+        super().__init__(*args, **kwargs)
+
+
+subprocess.Popen = _SilentPopen
 
 from .base import (
     BaseSpecsCollector,
