@@ -30,9 +30,10 @@ jobs:
           # For more information regarding Static Web App workflow configurations, please visit: https://aka.ms/swaworkflowconfig
           app_location: "/web" # App source code path
           api_location: "" # Api source code path - optional
-          output_location: "" # No build step — serve app_location directly
-          skip_app_build: true
+          output_location: "" # Relative to app_location — empty means app_location itself
           ###### End of Repository/Build Configurations ######
+        env:
+          SKIP_APP_BUILD: true
 
   close_pull_request_job:
     if: github.event_name == 'pull_request' && github.event.action == 'closed'
