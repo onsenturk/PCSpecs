@@ -50,6 +50,8 @@ a = Analysis(
         'webview.platforms.edgechromium',
         'clr_loader',
         'pythonnet',
+        'backports',
+        'backports.tarfile',
     ],
     hookspath=[],
     hooksconfig={},

@@ -6,4 +6,5 @@ GPUtil==1.4.0
 pywin32==308
 WMI==1.5.1
 pywebview==6.1
+backports.tarfile==1.2.0
 pyinstaller==6.11.1
