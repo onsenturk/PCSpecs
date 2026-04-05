@@ -3,7 +3,7 @@ name: Build Desktop App
 on:
   push:
     branches: [main]
-    paths: ['desktop/**']
+    tags: ['v*']
   workflow_dispatch:
 
 permissions:
